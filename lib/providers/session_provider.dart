@@ -46,8 +46,15 @@ class SessionProvider with ChangeNotifier {
   }
 
   void addNewSession(String sessionName) {
-    if (!_availableSessions.contains(sessionName)) {
+    if (!_availableSessions.contains(sessionName) && sessionName.isNotEmpty) {
       _availableSessions.add(sessionName);
+      notifyListeners();
+    }
+  }
+
+  void deleteSession(String sessionName) {
+    if (_availableSessions.contains(sessionName)) {
+      _availableSessions.remove(sessionName);
       notifyListeners();
     }
   }

@@ -29,6 +29,7 @@ class _StatsScreenState extends State<StatsScreen> {
             padding: const EdgeInsets.all(16.0),
             child: DropdownButton<String>(
               value: _selectedTimeFrame,
+              dropdownColor: Colors.grey[900],
               onChanged: (String? newValue) {
                 if (newValue != null) {
                   setState(() {
@@ -40,7 +41,7 @@ class _StatsScreenState extends State<StatsScreen> {
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value),
+                  child: Text(value, style: TextStyle(color: Colors.white)),
                 );
               }).toList(),
             ),
@@ -73,131 +74,107 @@ class _StatsScreenState extends State<StatsScreen> {
         child: Text(
           'No data available\nComplete some sessions to see statistics',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16, color: Colors.grey),
+          style: TextStyle(fontSize: 16, color: Colors.grey[400]),
         ),
       );
     }
 
     final List<Color> colors = [
-      Colors.blue,
-      Colors.red,
+      Colors.white,
       Colors.green,
+      Colors.blue,
       Colors.purple,
       Colors.orange,
       Colors.teal,
       Colors.pink,
-      Colors.amber,
-      Colors.cyan,
-      Colors.deepOrange,
     ];
 
     return ListView(
       children: [
         // Total time
         Card(
-          margin: EdgeInsets.all(16),
           child: Padding(
             padding: EdgeInsets.all(16),
             child: Column(
               children: [
                 Text(
                   'Total Focus Time',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 SizedBox(height: 8),
                 Text(
                   '$totalMinutes minutes',
-                  style: TextStyle(fontSize: 24, color: Colors.deepPurple),
+                  style: TextStyle(fontSize: 24, color: Colors.white),
                 ),
                 Text(
                   '${(totalMinutes / 60).toStringAsFixed(1)} hours',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  style: TextStyle(fontSize: 16, color: Colors.grey[400]),
                 ),
               ],
             ),
           ),
         ),
 
-        // Bar chart using custom widgets
+        // Bar chart
         Card(
-          margin: EdgeInsets.all(16),
           child: Padding(
             padding: EdgeInsets.all(16),
             child: Column(
               children: [
                 Text(
                   'Time by Session Type',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 SizedBox(height: 16),
                 Container(
-                  height: 300,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: stats.entries.map((entry) {
-                            final index = stats.keys.toList().indexOf(entry.key);
-                            final percentage = maxValue > 0 ? entry.value / maxValue : 0.0;
-                            final heightFactor = percentage.toDouble();
+                  height: 200,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: stats.entries.map((entry) {
+                      final index = stats.keys.toList().indexOf(entry.key);
+                      final percentage = maxValue > 0 ? entry.value / maxValue : 0.0;
+                      final heightFactor = percentage.toDouble();
 
-                            return Expanded(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 4),
-                                      child: Container(
-                                        alignment: Alignment.bottomCenter,
-                                        child: FractionallySizedBox(
-                                          heightFactor: heightFactor,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: colors[index % colors.length],
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(4),
-                                                topRight: Radius.circular(4),
-                                              ),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                '${entry.value}',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
+                      return Expanded(
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 4),
+                                child: Container(
+                                  alignment: Alignment.bottomCenter,
+                                  child: FractionallySizedBox(
+                                    heightFactor: heightFactor,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: colors[index % colors.length],
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(4),
+                                          topRight: Radius.circular(4),
                                         ),
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 4),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                                    child: Text(
-                                      _abbreviateSessionName(entry.key),
-                                      style: TextStyle(fontSize: 10),
-                                      textAlign: TextAlign.center,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            );
-                          }).toList(),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              '${entry.value}',
+                              style: TextStyle(fontSize: 10, color: Colors.white),
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              _abbreviateSessionName(entry.key),
+                              style: TextStyle(fontSize: 8, color: Colors.grey[400]),
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Minutes',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                    ],
+                      );
+                    }).toList(),
                   ),
                 ),
               ],
@@ -205,16 +182,15 @@ class _StatsScreenState extends State<StatsScreen> {
           ),
         ),
 
-        // Distribution as a list
+        // Distribution
         Card(
-          margin: EdgeInsets.all(16),
           child: Padding(
             padding: EdgeInsets.all(16),
             child: Column(
               children: [
                 Text(
                   'Time Distribution',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 SizedBox(height: 16),
                 Column(
@@ -224,7 +200,7 @@ class _StatsScreenState extends State<StatsScreen> {
                     final progressValue = (percentage / 100).toDouble();
 
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 6.0),
                       child: Row(
                         children: [
                           Container(
@@ -237,64 +213,25 @@ class _StatsScreenState extends State<StatsScreen> {
                             flex: 2,
                             child: Text(
                               entry.key,
-                              style: TextStyle(fontSize: 14),
+                              style: TextStyle(fontSize: 14, color: Colors.white),
                             ),
                           ),
                           Expanded(
                             flex: 3,
                             child: CustomProgressIndicator(
                               value: progressValue,
-                              backgroundColor: Colors.grey[200]!,
+                              backgroundColor: Colors.grey[800]!,
                               valueColor: colors[index % colors.length],
-                              height: 8,
+                              height: 6,
                             ),
                           ),
                           SizedBox(width: 8),
                           Text(
-                            '${entry.value} min\n${percentage.toStringAsFixed(1)}%',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey,
-                              height: 1.2,
-                            ),
-                            textAlign: TextAlign.right,
+                            '${percentage.toStringAsFixed(1)}%',
+                            style: TextStyle(fontSize: 12, color: Colors.grey[400]),
                           ),
                         ],
                       ),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        // Session details
-        Card(
-          margin: EdgeInsets.all(16),
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Text(
-                  'Session Details',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 16),
-                Column(
-                  children: stats.entries.map((entry) {
-                    final index = stats.keys.toList().indexOf(entry.key);
-                    final percentage = totalMinutes > 0 ? (entry.value / totalMinutes * 100) : 0.0;
-
-                    return ListTile(
-                      leading: Container(
-                        width: 16,
-                        height: 16,
-                        color: colors[index % colors.length],
-                      ),
-                      title: Text(entry.key),
-                      subtitle: Text('${percentage.toStringAsFixed(1)}% of total time'),
-                      trailing: Text('${entry.value} min'),
                     );
                   }).toList(),
                 ),
@@ -307,20 +244,7 @@ class _StatsScreenState extends State<StatsScreen> {
   }
 
   String _abbreviateSessionName(String name) {
-    if (name.length <= 8) return name;
-
-    // Try to abbreviate common session types
-    final abbreviations = {
-      'Programming': 'Code',
-      'Development': 'Dev',
-      'Reading': 'Read',
-      'Writing': 'Write',
-      'Studying': 'Study',
-      'Exercise': 'Exer',
-      'Meditation': 'Med',
-      'Planning': 'Plan',
-    };
-
-    return abbreviations[name] ?? name.substring(0, 7) + '..';
+    if (name.length <= 6) return name;
+    return name.substring(0, 5) + '..';
   }
 }

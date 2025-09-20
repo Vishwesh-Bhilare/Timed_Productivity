@@ -10,6 +10,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _sessionController = TextEditingController();
+  final TextEditingController _sessionTimeController = TextEditingController();
+  final TextEditingController _breakTimeController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final timerProvider = Provider.of<TimerProvider>(context, listen: false);
+    _sessionTimeController.text = timerProvider.sessionTime.toString();
+    _breakTimeController.text = timerProvider.breakTime.toString();
+  }
+
+  @override
+  void dispose() {
+    _sessionController.dispose();
+    _sessionTimeController.dispose();
+    _breakTimeController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final timerProvider = Provider.of<TimerProvider>(context);
@@ -17,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Check if timer completed and record session if needed
     if (timerProvider.remainingSeconds == 0 && !timerProvider.isRunning && timerProvider.isSession) {
-      // Add a small delay to allow UI to update first
       Future.delayed(Duration.zero, () {
         sessionProvider.recordSession(timerProvider.currentSession, timerProvider.sessionTime);
         timerProvider.resetTimer();
@@ -29,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('Focus Timer'),
         actions: [
           IconButton(
-            icon: Icon(Icons.bar_chart),
+            icon: Icon(Icons.bar_chart, color: Colors.white),
             onPressed: () {
               Navigator.pushNamed(context, '/stats');
             },
@@ -38,33 +57,63 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
-          // Session selector
+          // Session selector with type-able field
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: DropdownButton<String>(
-              value: timerProvider.currentSession,
-              onChanged: (String? newValue) {
-                if (newValue != null) {
-                  timerProvider.currentSession = newValue;
-                }
-              },
-              items: sessionProvider.availableSessions
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _sessionController,
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      labelText: 'Session Name',
+                      labelStyle: TextStyle(color: Colors.grey[400]),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey[700]!),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey[700]!),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      if (sessionProvider.availableSessions.contains(value)) {
+                        timerProvider.currentSession = value;
+                      }
+                    },
+                  ),
+                ),
+                SizedBox(width: 8),
+                IconButton(
+                  icon: Icon(Icons.add, color: Colors.white),
+                  onPressed: () {
+                    if (_sessionController.text.isNotEmpty) {
+                      sessionProvider.addNewSession(_sessionController.text);
+                      timerProvider.currentSession = _sessionController.text;
+                      _sessionController.clear();
+                    }
+                  },
+                ),
+              ],
             ),
           ),
 
-          // Add new session button
-          TextButton(
-            onPressed: () {
-              _showAddSessionDialog(context, sessionProvider);
-            },
-            child: Text('+ Add New Session Type'),
+          // Current session display
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'Current: ${timerProvider.currentSession}',
+              style: TextStyle(color: Colors.grey[400], fontSize: 14),
+            ),
           ),
+
+          SizedBox(height: 16),
 
           // Timer display
           Expanded(
@@ -72,27 +121,36 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  timerProvider.isSession ? 'Session' : 'Break',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  timerProvider.isSession ? 'SESSION' : 'BREAK',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[400],
+                    letterSpacing: 2,
+                  ),
                 ),
                 SizedBox(height: 20),
                 Stack(
                   alignment: Alignment.center,
                   children: [
                     SizedBox(
-                      width: 300,
-                      height: 300,
+                      width: 280,
+                      height: 280,
                       child: CircularProgressIndicator(
                         value: timerProvider.progress,
-                        strokeWidth: 10,
+                        strokeWidth: 8,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          timerProvider.isSession ? Colors.deepPurple : Colors.green,
+                          timerProvider.isSession ? Colors.white : Colors.green,
                         ),
+                        backgroundColor: Colors.grey[800],
                       ),
                     ),
                     Text(
                       timerProvider.formattedTime,
-                      style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 48,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.white,
+                      ),
                     ),
                   ],
                 ),
@@ -104,21 +162,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: timerProvider.toggleTimer,
                       child: Icon(
                         timerProvider.isRunning ? Icons.pause : Icons.play_arrow,
-                        size: 36,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: CircleBorder(),
-                        padding: EdgeInsets.all(20),
+                        size: 32,
                       ),
                     ),
                     SizedBox(width: 20),
                     ElevatedButton(
                       onPressed: timerProvider.resetTimer,
-                      child: Icon(Icons.refresh, size: 36),
-                      style: ElevatedButton.styleFrom(
-                        shape: CircleBorder(),
-                        padding: EdgeInsets.all(20),
-                      ),
+                      child: Icon(Icons.refresh, size: 32),
                     ),
                   ],
                 ),
@@ -128,50 +178,66 @@ class _HomeScreenState extends State<HomeScreen> {
 
           // Settings
           ExpansionTile(
-            title: Text('Settings'),
+            title: Text('Settings', style: TextStyle(color: Colors.white)),
             children: [
+              // Session time
               ListTile(
-                title: Text('Session Duration: ${timerProvider.sessionTime} minutes'),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.remove),
-                      onPressed: () {
-                        if (timerProvider.sessionTime > 1) {
-                          timerProvider.sessionTime = timerProvider.sessionTime - 1;
-                        }
-                      },
+                title: Text('Session Duration (min)', style: TextStyle(color: Colors.white)),
+                trailing: SizedBox(
+                  width: 100,
+                  child: TextField(
+                    controller: _sessionTimeController,
+                    style: TextStyle(color: Colors.white),
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[700]!),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        timerProvider.sessionTime = timerProvider.sessionTime + 1;
-                      },
-                    ),
-                  ],
+                    onChanged: (value) {
+                      final intValue = int.tryParse(value);
+                      if (intValue != null && intValue > 0) {
+                        timerProvider.sessionTime = intValue;
+                      }
+                    },
+                  ),
                 ),
               ),
+
+              // Break time
               ListTile(
-                title: Text('Break Duration: ${timerProvider.breakTime} minutes'),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.remove),
-                      onPressed: () {
-                        if (timerProvider.breakTime > 1) {
-                          timerProvider.breakTime = timerProvider.breakTime - 1;
-                        }
-                      },
+                title: Text('Break Duration (min)', style: TextStyle(color: Colors.white)),
+                trailing: SizedBox(
+                  width: 100,
+                  child: TextField(
+                    controller: _breakTimeController,
+                    style: TextStyle(color: Colors.white),
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[700]!),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        timerProvider.breakTime = timerProvider.breakTime + 1;
-                      },
-                    ),
-                  ],
+                    onChanged: (value) {
+                      final intValue = int.tryParse(value);
+                      if (intValue != null && intValue > 0) {
+                        timerProvider.breakTime = intValue;
+                      }
+                    },
+                  ),
+                ),
+              ),
+
+              // Manage sessions
+              ListTile(
+                title: Text('Manage Sessions', style: TextStyle(color: Colors.white)),
+                trailing: IconButton(
+                  icon: Icon(Icons.settings, color: Colors.white),
+                  onPressed: () => _showManageSessionsDialog(context, sessionProvider),
                 ),
               ),
             ],
@@ -181,35 +247,36 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _showAddSessionDialog(BuildContext context, SessionProvider sessionProvider) {
-    String newSessionName = '';
-
+  void _showManageSessionsDialog(BuildContext context, SessionProvider sessionProvider) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add New Session Type'),
-          content: TextField(
-            onChanged: (value) {
-              newSessionName = value;
-            },
-            decoration: InputDecoration(hintText: 'Enter session name'),
+          backgroundColor: Colors.grey[900],
+          title: Text('Manage Sessions', style: TextStyle(color: Colors.white)),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: sessionProvider.availableSessions.length,
+              itemBuilder: (context, index) {
+                final session = sessionProvider.availableSessions[index];
+                return ListTile(
+                  title: Text(session, style: TextStyle(color: Colors.white)),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      sessionProvider.deleteSession(session);
+                    },
+                  ),
+                );
+              },
+            ),
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                if (newSessionName.isNotEmpty) {
-                  sessionProvider.addNewSession(newSessionName);
-                  Navigator.of(context).pop();
-                }
-              },
-              child: Text('Add'),
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Close', style: TextStyle(color: Colors.white)),
             ),
           ],
         );
