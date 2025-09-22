@@ -5,6 +5,7 @@
 [![Issues](https://img.shields.io/github/issues/Vishwesh-Bhilare/Timed_Productivity?style=for-the-badge)](https://github.com/Vishwesh-Bhilare/Timed_Productivity/issues)
 [![Top Language](https://img.shields.io/github/languages/top/Vishwesh-Bhilare/Timed_Productivity?style=for-the-badge)](https://github.com/Vishwesh-Bhilare/Timed_Productivity)
 [![Last Commit](https://img.shields.io/github/last-commit/Vishwesh-Bhilare/Timed_Productivity?style=for-the-badge)](https://github.com/Vishwesh-Bhilare/Timed_Productivity/commits/main)
+[![Code Size](https://img.shields.io/github/languages/code-size/Vishwesh-Bhilare/Timed_Productivity?style=for-the-badge)](https://github.com/Vishwesh-Bhilare/Timed_Productivity)
 
 A minimal, black-themed **Pomodoro timer** app built to help you focus, track productivity, and organize tasks into categories.  
 Simple design • Useful stats • Open-source  
