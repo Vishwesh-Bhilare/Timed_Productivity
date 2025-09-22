@@ -55,8 +55,8 @@ Simple design • Useful stats • Open-source
 ---
 
 ### 100% Safe & Virus Free!!
-<img src="images/Virus_check_1_v1" alt="Virus check" width="200"/>
-<img src="images/Virus_check_1_v2" alt="Virus check" width="200"/>
+<img src="images/Virus_check_1_v1.png" alt="Virus check" width="200"/>
+<img src="images/Virus_check_1_v2.png" alt="Virus check" width="200"/>
 
 ---
 
