@@ -1,5 +1,10 @@
 # ⏱️ Timed Productivity – Pomodoro App
 
+[![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+[![Issues](https://img.shields.io/github/issues/your-username/Timed-Productivity?style=for-the-badge)](../../issues)
+[![Stars](https://img.shields.io/github/stars/your-username/Timed-Productivity?style=for-the-badge)](../../stargazers)
+
 A minimal, black-themed **Pomodoro timer** app built to help you focus, track productivity, and organize tasks into categories.  
 Simple design • Useful stats • Open-source  
 
@@ -29,6 +34,18 @@ Simple design • Useful stats • Open-source
 - Flutter (Dart)
 - Provider (state management)
 - Hive (local database)
+
+---
+
+### Installation
+
+# Download the app
+[Download APK](https://drive.google.com/file/d/1jS7TnpooWywptPaN-ZiQw0-kyHaa0_eg/view?usp=sharing)
+
+# Allow unwanted apps on your device
+<img src="images/Allow_unwanted_apps.jpeg" alt="Allow unwanted apps" width="200"/>
+
+# Install & Run!!
 
 ---
 
