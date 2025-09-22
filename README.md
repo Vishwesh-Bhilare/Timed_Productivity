@@ -2,8 +2,8 @@
 
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
-[![Issues](https://img.shields.io/github/issues/Vishwesh-Bhilare/Timed_Productivity?style=for-the-badge)](https://github.com/Vishwesh-Bhilare/Timed_Productivity/issues)
-[![Stars](https://img.shields.io/github/stars/Vishwesh-Bhilare/Timed_Productivity?style=for-the-badge)](https://github.com/Vishwesh-Bhilare/Timed_Productivity/stargazers)
+[![Issues](https://img.shields.io/github/issues/Vishwesh-Bhilare/Timed-Productivity?style=for-the-badge)](https://github.com/Vishwesh-Bhilare/Timed_Productivity/issues)
+[![Stars](https://img.shields.io/github/stars/Vishwesh-Bhilare/Timed-Productivity?style=for-the-badge)](https://github.com/Vishwesh-Bhilare/Timed_Productivity/stargazers)
 
 A minimal, black-themed **Pomodoro timer** app built to help you focus, track productivity, and organize tasks into categories.  
 Simple design • Useful stats • Open-source  
