@@ -10,6 +10,11 @@ Simple design • Useful stats • Open-source
 
 ---
 
+## Download the app
+[Download APK](https://drive.google.com/file/d/1jS7TnpooWywptPaN-ZiQw0-kyHaa0_eg/view?usp=sharing)
+
+---
+
 ## ✨ Features
 - 🎯 **Clean Focus Timer** – Start focus & break sessions with a distraction-free interface  
 - 📊 **Productivity Stats** – Track completed sessions at a glance  
@@ -39,13 +44,19 @@ Simple design • Useful stats • Open-source
 
 ### Installation
 
-# Download the app
+#### Download the app
 [Download APK](https://drive.google.com/file/d/1jS7TnpooWywptPaN-ZiQw0-kyHaa0_eg/view?usp=sharing)
 
-# Allow to install apps on your device
+#### Allow to install apps on your device
 <img src="images/Allow_apps.jpg" alt="Allow apps" width="200"/>
 
-# Install & Run!!
+#### Install & Run!!
+
+---
+
+### 100% Safe & Virus Free!!
+<img src="images/Virus_check_1_v1" alt="Virus check" width="200"/>
+<img src="images/Virus_check_1_v2" alt="Virus check" width="200"/>
 
 ---
 
