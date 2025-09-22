@@ -42,8 +42,8 @@ Simple design • Useful stats • Open-source
 # Download the app
 [Download APK](https://drive.google.com/file/d/1jS7TnpooWywptPaN-ZiQw0-kyHaa0_eg/view?usp=sharing)
 
-# Allow unwanted apps on your device
-<img src="images/Allow_unwanted_apps.jpeg" alt="Allow unwanted apps" width="200"/>
+# Allow to install apps on your device
+<img src="images/Allow_apps.jpg" alt="Allow apps" width="200"/>
 
 # Install & Run!!
 
